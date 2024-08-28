@@ -1,2 +1,2 @@
 # Project-1
-Nelson, Nebyu, Jabel, Aidan repository
+Nelson, Nebyu, Jabel, Aidan
