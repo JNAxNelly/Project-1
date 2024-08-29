@@ -1,8 +1,4 @@
 # Project-1
 Nelson, Nebyu, Jabel, Aidan
-works in both vs and terminal
-lm;mmmmmmmmmmmmmmmmmmmmmdsf
-
-
-dfasfd
-iudfhoidashfoiasj
+works for Jonathan: both vs and terminal
+Now we are working on getting it to work for nelson, aiden, and nebyu
