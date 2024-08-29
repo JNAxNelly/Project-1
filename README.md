@@ -1,6 +1,4 @@
 # Project-1
 Nelson, Nebyu, Jabel, Aidan
-first push from non origin
+I can not get vscode working but the terminal works
 
-hihsdjflkjsfl;kjsd
-sdneodjeid
