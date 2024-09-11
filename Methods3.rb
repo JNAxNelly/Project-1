@@ -1,5 +1,5 @@
 # This file contains the methods for the third set of functions in the calculator.
-class Calculator
+class Methods3
   # Category 1
   def sin(n)
     Math.sin(n)
@@ -112,4 +112,32 @@ class Calculator
   
     return mode_value
   end
+
+  #More methods
+  def add(n, m)
+    return n + m
+  end
+  
+  def subtract(n, m)
+    return n - m
+  end
+  
+  def multiply(n, m)
+    return n * m
+  end
+  
+  def divide(n, m)
+    if m == 0
+      return "Error: Division by zero is not allowed"
+    end
+    return n / m
+  end
+  
+  def mod(n, m)
+    if m == 0
+      return "Error: Modulus by zero is not allowed"
+    end
+    return n % m
+  end
+
 end
