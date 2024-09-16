@@ -159,5 +159,4 @@ class Methods1
 
 
 end 
-methods = Methods1.new
-methods.genSqrd([1, 10])
+
