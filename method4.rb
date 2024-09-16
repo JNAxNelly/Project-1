@@ -48,6 +48,9 @@ class Methods4
     end
 #fibonacci calculation
     def fibonacci(limit)
+        if limit <= 0
+            return "Error calculating fibonacci"
+        end
     fib = Array.new
     num1 = 1
     num2 = 0
