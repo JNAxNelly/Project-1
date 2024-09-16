@@ -63,6 +63,15 @@ end
 
 #Calculates the median of the data set
 def median(data)
+  
+  if data.empty?
+    return nil
+  end
+
+  if data.length == 1
+    return data[0]
+  end
+
     data.sort!
     len=data.length
     if len % 2 == 0
@@ -76,6 +85,10 @@ def median(data)
  
 #Checks if a number is prime
 def isPrime?(n)
+    if n < 0
+      return false
+    end
+
     if n <= 1
       return false
     end
@@ -111,6 +124,4 @@ def generateprime(num)
   puts "Primes less than #{num} have been saved to primes.txt." 
 
   end
-
 end
-
