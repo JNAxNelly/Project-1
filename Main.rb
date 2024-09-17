@@ -141,7 +141,8 @@ buttons = [
   ['7', '8', '9', '*'],
   ['4', '5', '6', '-'],
   ['1', '2', '3', '+'],
-  ['C', '0', '=', '^']
+  ['C', '0', '=', '^'],
+  ['Log', 'Fact', '%', 'Median', 'Prime']
 ]
 
 # Create number buttons 0-9 and operator buttons
@@ -160,6 +161,45 @@ buttons.each_with_index do |row, row_index|
           clear_display(display)
         when '='
           evaluate_expression(display)
+        when 'Fact'
+          n = $current_input.to_i
+          result = methods.factorial(n)
+          display.text = result.to_s
+          $current_input = result.to_s
+        when 'log'
+          values = $current_input.split(',')
+          if values.length == 2
+            a = values[0].to_f
+            b = values[1].to_f
+            result = methods.logarithm(a, b)
+            display.text = result.to_s
+            $current_input = result.to_s
+          else
+            display.text = 'Error: Invalid input'
+            $current_input = ''
+          end
+        when 'Percent'
+          values = $current_input.split(',')
+          if values.length == 2
+            a = values[0].to_f
+            b = values[1].to_f
+            result = methods.percentage(a, b)
+            display.text = result.to_s + '%'
+            $current_input = result.to_s
+          else
+            display.text = 'Error: Invalid input'
+            $current_input = ''
+          end
+        when 'Median'
+          data = $current_input.split(',').map(&:to_f)
+          result = methods.median(data)
+          display.text = result.to_s
+          $current_input = result.to_s
+        when 'Prime'
+          n = $current_input.to_i
+          methods.generateprime(n)
+          display.text = "Primes saved"
+          $current_input = ''
         else
           update_display(button_text, display)
         end
