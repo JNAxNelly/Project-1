@@ -51,7 +51,7 @@ class Methods4
         if limit <= 0
             return "Error calculating fibonacci"
         end
-    fib = Array.new
+    file = File.open("fib.txt", "w")
     num1 = 1
     num2 = 0
     num3 = 0
@@ -59,9 +59,10 @@ class Methods4
         num3 = num1 
         num1 = num2 + num1
         num2 = num3
-        fib.push(num1)
+        file.puts(num1)
         end
-        return fib
+        file.close()
+        puts("numbers generated to fib.txt")
     end
 #fahrenheit to celsius calculation
     def fToC(degree)
