@@ -164,11 +164,17 @@ end
 
 button_frame = TkFrame.new(root).pack
 buttons = [
-  ['(', ')', '√', '/'],
+  ['(', ')', 'sqrt', '/'],
   ['7', '8', '9', '*'],
   ['4', '5', '6', '-'],
   ['1', '2', '3', '+'],
-  ['C', '0', '=', '^']
+  ['C', '0', '=', '^'],
+  ['sin', 'cos', 'tan','mean'],
+  ['genOdd','genEven','Neg','median'],
+  ['genSqrd','genPrime','genFib','mode'],
+  ['log','max','min','binary'],
+  ['!','%','cbrt','octal',],
+  ['hexa']
 ]
 
 buttons.each_with_index do |row, row_index|
@@ -185,7 +191,68 @@ buttons.each_with_index do |row, row_index|
         when 'C'
           clear_display(display)
         when '='
-          evaluate_expression(display)
+          evaluate_expression(display, methods_instance)
+        when 'Neg'
+          if !$current_input.empty?
+            if $current_input[-1] =~ /[\+\-\*\/]/
+              update_display('-', display)
+            elsif $current_input[-1] != '('
+              $current_input = "-#{$current_input}" unless $current_input.start_with?('-')
+              display.text = $current_input
+            end
+          else
+            update_display('-', display)
+          end
+        when 'genOdd'
+          odd_popup(methods_instance, display)
+        when 'sin'
+          result = methods_instance.sin($current_input.to_f)
+          display.text = result.to_s
+          $current_input = result.to_s
+        when 'cos'
+          result = methods_instance.cos($current_input.to_f)
+          display.text = result.to_s
+          $current_input = result.to_s
+        when 'tan'
+          result = methods_instance.tan($current_input.to_f)
+          display.text = result.to_s
+          $current_input = result.to_s
+        when 'abs'
+          #TODO
+        when 'cbrt'
+          #TODO
+        when 'genEven'
+          #TODO
+        when 'genSqrd'
+          #TODO
+        when 'log'
+          #TODO
+        when '!'
+          #TODO
+        when '%'
+          #TODO
+        when 'median'
+          #TODO
+        when 'genPrime'
+          #TODO
+        when 'min'
+          #TODO
+        when 'isPrime'
+          #TODO
+        when 'mode'
+          #TODO
+        when 'binary'
+          #TODO
+        when 'octal'
+          #TODO
+        when 'hexa'
+          #TODO
+        when 'mean'
+          #TODO
+        when 'max'
+          #TODO
+        when 'genFib'
+          #TODO
         else
           update_display(button_text, display)
         end
