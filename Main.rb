@@ -1,6 +1,7 @@
 require 'tk'
 require_relative 'Methods3'
 
+
 # Create the main window (root)
 root = TkRoot.new { title "Calculator" }
 
@@ -25,7 +26,7 @@ OPERATORS = {
   '√' => 4
 }
 
-methods_instance = Methods3.new
+methods_instance3 = Methods3.new
 
 def update_display(new_value, display)
   $current_input += new_value
@@ -67,7 +68,7 @@ def to_postfix(expression)
   output
 end
 
-def evaluate_postfix(postfix, methods_instance)
+def evaluate_postfix(postfix, methods_instance1)
   stack = []
 
   postfix.each do |token|
@@ -99,17 +100,17 @@ def evaluate_postfix(postfix, methods_instance)
       stack.push(a**b)
     elsif token == '√'
       a = stack.pop
-      stack.push(methods_instance.sqrt(a))
+      stack.push(methods_instance1.sqrt(a))
     end
   end
 
   stack.pop
 end
 
-def evaluate_expression(display, methods_instance)
+def evaluate_expression(display, methods_instance3)
   begin
     postfix = to_postfix($current_input)
-    result = evaluate_postfix(postfix, methods_instance)
+    result = evaluate_postfix(postfix, methods_instance3)
 
     if result == Float::INFINITY || result.nan?
       display.text = 'Error: Division by Zero'
@@ -124,19 +125,19 @@ def evaluate_expression(display, methods_instance)
   end
 end
 
-def handle_odd_to_file(methods_instance, range_start, range_end, display)
+def handle_odd_to_file(methods_instance3, range_start, range_end, display)
   start_val = range_start.value.to_i
   end_val = range_end.value.to_i
 
   if start_val >= end_val
     display.text = "Invalid Range"
   else
-    methods_instance.generateOddToFile([start_val, end_val], "odd_numbers.txt")
+    methods_instance3.generateOddToFile([start_val, end_val], "odd_numbers.txt")
     display.text = "Odd numbers saved to file."
   end
 end
 
-def odd_popup(methods_instance, display)
+def odd_popup(methods_instance3, display)
   popup = TkToplevel.new { title "Odd Number Generator" }
 
   range_label = TkLabel.new(popup) do
@@ -157,14 +158,102 @@ def odd_popup(methods_instance, display)
 
   TkButton.new(popup) do
     text 'Generate Odd Numbers'
-    command { handle_odd_to_file(methods_instance, range_start, range_end, display) }
+    command { handle_odd_to_file(methods_instance3, range_start, range_end, display) }
+    pack { padx 10; pady 10 }
+  end
+end
+
+def prime_popup(methods_instance3, display)
+  popup = TkToplevel.new { title "Prime Number Checker" }
+
+  prime_label = TkLabel.new(popup) do
+    text 'Enter a number to check if it is prime:'
+    font TkFont.new('times 15 bold')
+    pack { padx 10; pady 5 }
+  end
+
+  prime_input = TkEntry.new(popup) do
+    width 10
+    pack { padx 10; pady 5 }
+  end
+
+  TkButton.new(popup) do
+    text 'Check Prime'
+    command {
+      number = prime_input.value.to_i
+      if methods_instance3.isPrime?(number)
+        display.text = "#{number} is Prime"
+      else
+        display.text = "#{number} is not Prime"
+      end
+    }
+    pack { padx 10; pady 10 }
+  end
+end
+
+def minimum_popup(methods_instance3, display)
+  popup = TkToplevel.new { title "Minimum Calculator" }
+
+  min_label = TkLabel.new(popup) do
+    text 'Enter a list of numbers (comma-separated):'
+    font TkFont.new('times 15 bold')
+    pack { padx 10; pady 5 }
+  end
+
+  min_input = TkEntry.new(popup) do
+    width 30
+    pack { padx 10; pady 5 }
+  end
+
+  TkButton.new(popup) do
+    text 'Calculate Minimum'
+    command {
+      numbers = min_input.value.split(',').map(&:to_i)
+      result = methods_instance3.minimum(numbers)
+      display.text = "Minimum: #{result}"
+    }
+    pack { padx 10; pady 10 }
+  end
+end
+
+# Method to handle mode input and display result
+def handle_mode_input(methods_instance3, mode_input, display)
+  data = mode_input.value.split(',').map(&:to_i) # Convert the input to an array of integers
+  if data.empty?
+    display.text = "Invalid Input"
+  else
+    result = methods_instance3.mode(data)
+    display.text = "Mode: #{result}"
+  end
+end
+
+# Popup for mode calculation
+def mode_popup(methods_instance3, display)
+  popup = TkToplevel.new { title "Mode Calculator" }
+
+  mode_label = TkLabel.new(popup) do
+    text 'Enter a list of numbers (comma-separated):'
+    font TkFont.new('times 15 bold')
+    pack { padx 10; pady 5 }
+  end
+
+  # Input field for the list of numbers
+  mode_input = TkEntry.new(popup) do
+    width 30
+    pack { padx 10; pady 5 }
+  end
+
+  # Button to calculate the mode
+  TkButton.new(popup) do
+    text 'Calculate Mode'
+    command { handle_mode_input(methods_instance3, mode_input, display) }
     pack { padx 10; pady 10 }
   end
 end
 
 button_frame = TkFrame.new(root).pack
 buttons = [
-  ['(', ')', 'sqrt', '/'],
+  ['(', ')', '√', '/'],
   ['7', '8', '9', '*'],
   ['4', '5', '6', '-'],
   ['1', '2', '3', '+'],
@@ -174,7 +263,7 @@ buttons = [
   ['genSqrd','genPrime','genFib','mode'],
   ['log','max','min','binary'],
   ['!','%','cbrt','octal',],
-  ['hexa']
+  ['hexa', 'isPrime']
 ]
 
 buttons.each_with_index do |row, row_index|
@@ -191,7 +280,7 @@ buttons.each_with_index do |row, row_index|
         when 'C'
           clear_display(display)
         when '='
-          evaluate_expression(display, methods_instance)
+          evaluate_expression(display, methods_instance3)
         when 'Neg'
           if !$current_input.empty?
             if $current_input[-1] =~ /[\+\-\*\/]/
@@ -204,17 +293,17 @@ buttons.each_with_index do |row, row_index|
             update_display('-', display)
           end
         when 'genOdd'
-          odd_popup(methods_instance, display)
+          odd_popup(methods_instance3, display)
         when 'sin'
-          result = methods_instance.sin($current_input.to_f)
+          result = methods_instance3.sin($current_input.to_f)
           display.text = result.to_s
           $current_input = result.to_s
         when 'cos'
-          result = methods_instance.cos($current_input.to_f)
+          result = methods_instance3.cos($current_input.to_f)
           display.text = result.to_s
           $current_input = result.to_s
         when 'tan'
-          result = methods_instance.tan($current_input.to_f)
+          result = methods_instance3.tan($current_input.to_f)
           display.text = result.to_s
           $current_input = result.to_s
         when 'abs'
@@ -236,11 +325,11 @@ buttons.each_with_index do |row, row_index|
         when 'genPrime'
           #TODO
         when 'min'
-          #TODO
+          minimum_popup(methods_instance3, display)
         when 'isPrime'
-          #TODO
+          prime_popup(methods_instance3, display)
         when 'mode'
-          #TODO
+          mode_popup(methods_instance3, display)
         when 'binary'
           #TODO
         when 'octal'
