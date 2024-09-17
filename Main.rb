@@ -141,7 +141,8 @@ buttons = [
   ['7', '8', '9', '*'],
   ['4', '5', '6', '-'],
   ['1', '2', '3', '+'],
-  ['C', '0', '=', '^']
+  ['C', '0', '=', '^'],
+  ['Binary','Octal','Hexa']
 ]
 
 # Create number buttons 0-9 and operator buttons
@@ -160,6 +161,18 @@ buttons.each_with_index do |row, row_index|
           clear_display(display)
         when '='
           evaluate_expression(display)
+        when 'Binary'
+          number = $current_input.to_i
+          display.text = number.to_s(2)
+          $current_input = display.text
+        when 'Octal'
+          number = $current_input.to_i
+          display.text = number.to_s(8)
+          $current_input = display.text
+        when 'Hexa'
+          number = $current_input.to_i
+          display.text = number.to_s(16)
+          $current_input = display.text
         else
           update_display(button_text, display)
         end
