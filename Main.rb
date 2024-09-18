@@ -1,4 +1,5 @@
 require 'tk'
+require_relative 'method4'
 require_relative 'Methods3'
 
 # Create the main window (root)
@@ -26,6 +27,7 @@ OPERATORS = {
 }
 
 methods_instance = Methods3.new
+methods_instance4 = Methods4.new
 
 def update_display(new_value, display)
   $current_input += new_value
@@ -162,6 +164,93 @@ def odd_popup(methods_instance, display)
   end
 end
 
+#Method mean for the separate GUI to take in an array
+def mean_popup(methods_instance4, display)
+  popup = TkToplevel.new { title "Mean Number Calculation"}
+  #label to prompt user for entering array
+  arr_label = TkLabel.new(popup) do
+    text 'Enter array of numbers, separated by commas'
+    font TkFont.new('times 15 bold')
+    pack { padx 10; pady 5 }
+  end
+  #input box for array
+  arr_entry = TkEntry.new(popup) do
+    width 20
+    pack { padx 10; pady 5 }
+  end
+  #button to call method and print to main calculator gui
+  TkButton.new(popup) do
+    text 'Calculate Mean'
+    command do
+      input = arr_entry.value
+      number_array = input.split(',').map(&:strip).map(&:to_f)
+
+      mean_result = methods_instance4.mean(number_array)
+
+      display.text = mean_result.to_s
+      $current_input = mean_result.to_s
+    end
+    pack { padx 15; pady 10 }
+  end
+end
+
+#Method max for the separate GUI to take in an array
+def max_popup(methods_instance4, display)
+  popup = TkToplevel.new { title "Max Number Calculation"}
+  #label to prompt user for entering array
+  arr_label = TkLabel.new(popup) do
+    text 'Enter array of numbers, separated by commas'
+    font TkFont.new('times 15 bold')
+    pack { padx 10; pady 5 }
+  end
+  #input box for array
+  arr_entry = TkEntry.new(popup) do
+    width 20
+    pack { padx 10; pady 5 }
+  end
+  #button to call method and print to main calculator gui
+  TkButton.new(popup) do
+    text 'Calculate Max'
+    command do
+      input = arr_entry.value
+      number_array = input.split(',').map(&:strip).map(&:to_f)
+
+      max_result = methods_instance4.maximum(number_array)
+      display.text = "Maximum #{max_result}"
+      $current_input = max_result.to_s
+    end
+    pack { padx 15; pady 10 }
+  end
+end
+#Method fibonacci for separate GUI to prompt limit
+def fib_popup(methods_instance4, display)
+  popup = TkToplevel.new { title "Fibonacci Generator"}
+  #label to ask user for limit to input
+  fib_label = TkLabel.new(popup) do
+    text 'Enter limit'
+    font TkFont.new('times 15 bold')
+    pack { padx 10; pady 5 }
+  end
+ #box to input limit to
+  limit_entry = TkEntry.new(popup) do
+    width 10
+    pack { padx 10; pady 5}
+  end
+ #Prints a message to calculator to confirm printed to file
+ TkButton.new(popup) do
+   text 'Generate Fibonacci'
+   command do
+     input = limit_entry.value.to_i
+     if input > 0
+       result = methods_instance4.fibonacci(input)
+       display.text = "Fib printed to file"
+     else
+      display.text = "Error printing fib"
+     end
+   end
+   pack { padx 10; pady 10}
+ end
+end
 button_frame = TkFrame.new(root).pack
 buttons = [
   ['(', ')', 'sqrt', '/'],
@@ -174,7 +263,7 @@ buttons = [
   ['genSqrd','genPrime','genFib','mode'],
   ['log','max','min','binary'],
   ['!','%','cbrt','octal',],
-  ['hexa']
+  ['hexa','FtoC']
 ]
 
 buttons.each_with_index do |row, row_index|
@@ -242,18 +331,28 @@ buttons.each_with_index do |row, row_index|
         when 'mode'
           #TODO
         when 'binary'
-          #TODO
+          binary = methods_instance4.binary($current_input.to_i)
+          display.text = binary
+          $current_input = display.text
         when 'octal'
-          #TODO
+          octal = methods_instance4.octal($current_input.to_i)
+          display.text = octal
+          $current_input = display.text
         when 'hexa'
-          #TODO
+          hexa = methods_instance4.hexadecimal($current_input.to_i)
+          display.text = hexa
+          $current_input = display.text
         when 'mean'
-          #TODO
+          mean_popup(methods_instance4, display)
         when 'max'
-          #TODO
+          max_popup(methods_instance4, display)
         when 'genFib'
-          #TODO
-        else
+          fib_popup(methods_instance4, display)
+        when 'FtoC'
+          celsius = methods_instance4.fToC($current_input.to_i)
+          display.text = "#{celsius} C"
+          $current_input = display.text
+        else 
           update_display(button_text, display)
         end
       end
