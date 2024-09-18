@@ -27,7 +27,8 @@ OPERATORS = {
   '√' => 4
 }
 
-methods_instance = Methods3.new
+methods_instance3 = Methods3.new
+methods_instance1 = Methods1.new
 
 def update_display(new_value, display)
   $current_input += new_value
