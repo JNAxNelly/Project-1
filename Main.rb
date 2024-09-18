@@ -357,7 +357,7 @@ buttons.each_with_index do |row, row_index|
         when 'C'
           clear_display(display)
         when '='
-          evaluate_expression(display, methods_instance)
+          evaluate_expression(display, methods_instance3)
         when 'Neg'
           if !$current_input.empty?
             if $current_input[-1] =~ /[\+\-\*\/]/
