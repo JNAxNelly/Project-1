@@ -70,7 +70,7 @@ def to_postfix(expression)
   output
 end
 
-def evaluate_postfix(postfix, methods_instance)
+def evaluate_postfix(postfix, methods_instance3)
   stack = []
 
   postfix.each do |token|
@@ -100,9 +100,6 @@ def evaluate_postfix(postfix, methods_instance)
       b = stack.pop
       a = stack.pop
       stack.push(a**b)
-    elsif token == '√'
-      a = stack.pop
-      stack.push(methods_instance.sqrt(a))
     end
   end
 
@@ -357,7 +354,7 @@ buttons.each_with_index do |row, row_index|
         when 'C'
           clear_display(display)
         when '='
-          evaluate_expression(display, methods_instance)
+          evaluate_expression(display, methods_instance3)
         when 'Neg'
           if !$current_input.empty?
             if $current_input[-1] =~ /[\+\-\*\/]/
