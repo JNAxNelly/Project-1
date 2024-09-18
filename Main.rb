@@ -47,10 +47,10 @@ end
 def to_postfix(expression)
   output = []
   operator_stack = []
-  tokens = expression.scan(/-?\d+\.?\d*|\+|\-|\*|\/|\^|\(|\)|√/)
-
+  tokens = expression.scan(/\d+\.?\d*|\+|\-|\*|\/|\^|\(|\)|√/) # Updated the tokenization
+  
   tokens.each_with_index do |token, index|
-    if token =~ /-?\d/
+    if token =~ /\d/ # Match numbers
       output << token
     elsif token == '('
       operator_stack.push(token)
@@ -60,17 +60,24 @@ def to_postfix(expression)
       end
       operator_stack.pop
     elsif OPERATORS[token]
-      while !operator_stack.empty? && OPERATORS[operator_stack.last] && OPERATORS[operator_stack.last] >= OPERATORS[token]
-        output << operator_stack.pop
+      # Handle negative number cases:
+      # If token is '-' and is the first character or follows an operator or '(', it's a negative sign
+      if token == '-' && (index == 0 || tokens[index - 1] =~ /[\+\-\*\/\(]/)
+        output << '0' # Insert a '0' to make subtraction work (e.g., 0 - 3 instead of just -3)
+        operator_stack.push(token)
+      else
+        while !operator_stack.empty? && OPERATORS[operator_stack.last] && OPERATORS[operator_stack.last] >= OPERATORS[token]
+          output << operator_stack.pop
+        end
+        operator_stack.push(token)
       end
-      operator_stack.push(token)
     end
   end
-
+  
   while !operator_stack.empty?
     output << operator_stack.pop
   end
-
+  
   output
 end
 
@@ -363,6 +370,53 @@ def minimum_popup(methods_instance3, display)
     pack { padx 10; pady 10 }
   end
 end
+def ExponentMethod(methods_instance1, display)
+  popup = TkToplevel.new { title "Exponent Calculator" }
+
+  exp_label = TkLabel.new(popup) do
+    text 'Enter a base and an exponent (comma-separated):'
+    font TkFont.new('times 15 bold')
+    pack { padx 10; pady 5 }
+  end
+
+  exp_input = TkEntry.new(popup) do
+    width 30
+    pack { padx 10; pady 5 }
+  end
+
+  TkButton.new(popup) do
+    text 'Calculate Exponent'
+    command {
+      begin
+        # Split input and map to integers
+        data = exp_input.value.split(',').map(&:strip)
+        
+        # Validate input: check if exactly two values are given and they are numeric
+        if data.size != 2 || !is_numeric?(data[0]) || !is_numeric?(data[1])
+          raise ArgumentError, "Invalid input"
+        end
+        
+        base = data[0].to_f
+        exponent = data[1].to_i
+
+        # Perform the exponentiation
+        result = methods_instance1.exponent(base, exponent)
+        display.text = "Exponent: #{result}"
+
+      rescue ArgumentError => e
+        display.text = "Invalid input"
+      rescue => e
+        display.text = "Invalid input"
+      end
+    }
+    pack { padx 10; pady 10 }
+  end
+end
+
+# Helper function to check if a string can be converted to a number
+def is_numeric?(str)
+  true if Float(str) rescue false
+end
 
 # Method to handle mode input and display result
 def handle_mode_input(methods_instance3, mode_input, display)
@@ -524,6 +578,7 @@ def fib_popup(methods_instance4, display)
    pack { padx 10; pady 10}
  end
 end
+
 button_frame = TkFrame.new(root).pack
 buttons = [
   ['(', ')', '√', '/'],
@@ -596,9 +651,7 @@ buttons.each_with_index do |row, row_index|
         when 'genSqrd'
           sqr_popup(methods_instance1, display)
         when '^'
-          result = methods_instance1.exponent($current_input.to_f)
-          display.text = result.to_s
-          $current_input = result.to_s
+          ExponentMethod(methods_instance1, display)
         when 'log'
           log_popup(methods_instance2, display)
         when '!'
