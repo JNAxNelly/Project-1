@@ -1,4 +1,4 @@
-require_relative 'method2'  # This assumes your main methods are in 'method2.rb'
+require_relative 'method2'
 
 methods = Method2.new
 

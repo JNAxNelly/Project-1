@@ -345,18 +345,7 @@ buttons.each_with_index do |row, row_index|
           #TODO
         when 'log'
           #TODO
-          # values = $current_input.split(',')
-          #if values.length == 2
-          #   a = values[0].to_f
-          #   b = values[1].to_f
-          #   result = methods_instance2.logarithm(a, b)
-          #   display.text = result.to_s
-          #   $current_input = result.to_s
             log_popup(methods_instance2, display)
-          #else
-            #display.text = 'Error: Invalid input'
-            #$current_input = ''
-          #end
         when '!'
           #TODO
           n = $current_input.to_i
@@ -365,24 +354,10 @@ buttons.each_with_index do |row, row_index|
           $current_input = result.to_s
         when '%'
           #TODO
-          values = $current_input.split(',')
-          #if values.length == 2
-            # a = values[0].to_f
-            # b = values[1].to_f
-            # result = methods_instance2.percentage(a, b)
-            # display.text = result.to_s + '%'
-            # $current_input = result.to_s
             percent_popup(methods_instance2, display)
-          #else
-            #display.text = 'Error: Invalid input'
-            #$current_input = ''
-          #end
+          
         when 'median'
           #TODO
-          #data = $current_input.split(',').map(&:to_f)
-          #result = methods_instance2.median(data)
-          #display.text = result.to_s
-          #$current_input = result.to_s
           median_popup(methods_instance2, display)
         when 'genPrime'
           #TODO
