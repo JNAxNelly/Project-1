@@ -1,5 +1,8 @@
 require 'tk'
 require_relative 'Methods3'
+require_relative 'Method2'
+
+
 
 # Create the main window (root)
 root = TkRoot.new { title "Calculator" }
@@ -25,7 +28,8 @@ OPERATORS = {
   '√' => 4
 }
 
-methods_instance = Methods3.new
+methods_instance3 = Methods3.new
+methods_instance2 = Method2.new
 
 def update_display(new_value, display)
   $current_input += new_value
@@ -67,7 +71,7 @@ def to_postfix(expression)
   output
 end
 
-def evaluate_postfix(postfix, methods_instance)
+def evaluate_postfix(postfix, methods_instance3)
   stack = []
 
   postfix.each do |token|
@@ -99,17 +103,34 @@ def evaluate_postfix(postfix, methods_instance)
       stack.push(a**b)
     elsif token == '√'
       a = stack.pop
-      stack.push(methods_instance.sqrt(a))
+      stack.push(methods_instance3.sqrt(a))
     end
   end
 
   stack.pop
 end
 
-def evaluate_expression(display, methods_instance)
+
+
+button_frame = TkFrame.new(root).pack
+buttons = [
+  ['(', ')', 'sqrt', '/'],
+  ['7', '8', '9', '*'],
+  ['4', '5', '6', '-'],
+  ['1', '2', '3', '+'],
+  ['C', '0', '=', '^'],
+  ['sin', 'cos', 'tan','mean'],
+  ['genOdd','genEven','Neg','median'],
+  ['genSqrd','genPrime','genFib','mode'],
+  ['log','max','min','binary'],
+  ['!','%','cbrt','octal',],
+  ['hexa']
+]
+
+def evaluate_expression(display, methods_instance3)
   begin
     postfix = to_postfix($current_input)
-    result = evaluate_postfix(postfix, methods_instance)
+    result = evaluate_postfix(postfix, methods_instance3)
 
     if result == Float::INFINITY || result.nan?
       display.text = 'Error: Division by Zero'
@@ -124,19 +145,131 @@ def evaluate_expression(display, methods_instance)
   end
 end
 
-def handle_odd_to_file(methods_instance, range_start, range_end, display)
+#Nebyu Method 2 popups ------------------------------------------------
+def handle_median_to_file(methods_instance2, data_entry, display, popup)
+  data = data_entry.value.split(',').map(&:to_f)
+  result = methods_instance2.median(data)
+  display.text = result.to_s
+  
+  popup.destroy
+end
+
+def median_popup(methods_instance2, display)
+  popup = TkToplevel.new { title "Median Calculator" }
+
+  TkLabel.new(popup) do
+    text 'Enter numbers (comma-separated):'
+    pack { padx 10; pady 5 }
+  end
+
+  data_entry = TkEntry.new(popup) do
+    width 30
+    pack { padx 10; pady 5 }
+  end
+
+  TkButton.new(popup) do
+    text 'Calculate Median'
+    command { handle_median_to_file(methods_instance2, data_entry, display, popup) }
+    pack { padx 10; pady 10 }
+  end
+end
+
+def handle_log(methods_instance2, base_entry, number_entry, display, popup)
+  base = base_entry.value.to_f
+  number = number_entry.value.to_f
+
+  result = methods_instance2.logarithm(base, number)
+  display.text = result.to_s
+  
+  popup.destroy
+end
+
+def log_popup(methods_instance2, display)
+  popup = TkToplevel.new { title "Logarithm Calculator" }
+
+  TkLabel.new(popup) do
+    text 'Enter number:'
+    pack { padx 10; pady 5 }
+  end
+
+  base_entry = TkEntry.new(popup) do
+    width 10
+    pack { padx 10; pady 5 }
+  end
+
+  TkLabel.new(popup) do
+    text 'Enter base:'
+    pack { padx 10; pady 5 }
+  end
+
+  number_entry = TkEntry.new(popup) do
+    width 10
+    pack { padx 10; pady 5 }
+  end
+
+  TkButton.new(popup) do
+    text 'Calculate Log'
+    command { handle_log(methods_instance2, base_entry, number_entry, display, popup) }
+    pack { padx 10; pady 10 }
+  end
+end
+
+def handle_percent(methods_instance2, base_entry, percent_entry, display, popup)
+  base = base_entry.value.to_f
+  percent = percent_entry.value.to_f
+
+  result = methods_instance2.percentage(base, percent)
+  display.text = result.to_s + '%'
+  
+  popup.destroy
+end
+
+def percent_popup(methods_instance2, display)
+  popup = TkToplevel.new { title "Percentage Calculator" }
+
+  TkLabel.new(popup) do
+    text 'Enter base value:'
+    pack { padx 10; pady 5 }
+  end
+
+  base_entry = TkEntry.new(popup) do
+    width 10
+    pack { padx 10; pady 5 }
+  end
+
+  TkLabel.new(popup) do
+    text 'Enter percentage:'
+    pack { padx 10; pady 5 }
+  end
+
+  percent_entry = TkEntry.new(popup) do
+    width 10
+    pack { padx 10; pady 5 }
+  end
+
+  TkButton.new(popup) do
+    text 'Calculate Percent'
+    command { handle_percent(methods_instance2, base_entry, percent_entry, display, popup) }
+    pack { padx 10; pady 10 }
+  end
+end
+#End of Methods 2 ------------------------------------------------
+
+
+#Method 3
+def handle_odd_to_file(methods_instance3, range_start, range_end, display)
   start_val = range_start.value.to_i
   end_val = range_end.value.to_i
 
   if start_val >= end_val
     display.text = "Invalid Range"
   else
-    methods_instance.generateOddToFile([start_val, end_val], "odd_numbers.txt")
+    methods_instance3.generateOddToFile([start_val, end_val], "odd_numbers.txt")
     display.text = "Odd numbers saved to file."
   end
 end
 
-def odd_popup(methods_instance, display)
+def odd_popup(methods_instance3, display)
   popup = TkToplevel.new { title "Odd Number Generator" }
 
   range_label = TkLabel.new(popup) do
@@ -157,29 +290,10 @@ def odd_popup(methods_instance, display)
 
   TkButton.new(popup) do
     text 'Generate Odd Numbers'
-    command { handle_odd_to_file(methods_instance, range_start, range_end, display) }
+    command { handle_odd_to_file(methods_instance3, range_start, range_end, display) }
     pack { padx 10; pady 10 }
   end
 end
-
-button_frame = TkFrame.new(root).pack
-buttons = [
-  ['(', ')', 'sqrt', '/'],
-  ['7', '8', '9', '*'],
-  ['4', '5', '6', '-'],
-  ['1', '2', '3', '+'],
-  ['C', '0', '=', '^'],
-<<<<<<< HEAD
-  ['Log', 'Fact', '%', 'Median', 'Prime']
-=======
-  ['sin', 'cos', 'tan','mean'],
-  ['genOdd','genEven','Neg','median'],
-  ['genSqrd','genPrime','genFib','mode'],
-  ['log','max','min','binary'],
-  ['!','%','cbrt','octal',],
-  ['hexa']
->>>>>>> e29c4d8d31b7fb66c197185e6b9b9e016fbbc36a
-]
 
 buttons.each_with_index do |row, row_index|
   row.each_with_index do |button_text, col_index|
@@ -195,49 +309,7 @@ buttons.each_with_index do |row, row_index|
         when 'C'
           clear_display(display)
         when '='
-<<<<<<< HEAD
-          evaluate_expression(display)
-        when 'Fact'
-          n = $current_input.to_i
-          result = methods.factorial(n)
-          display.text = result.to_s
-          $current_input = result.to_s
-        when 'log'
-          values = $current_input.split(',')
-          if values.length == 2
-            a = values[0].to_f
-            b = values[1].to_f
-            result = methods.logarithm(a, b)
-            display.text = result.to_s
-            $current_input = result.to_s
-          else
-            display.text = 'Error: Invalid input'
-            $current_input = ''
-          end
-        when 'Percent'
-          values = $current_input.split(',')
-          if values.length == 2
-            a = values[0].to_f
-            b = values[1].to_f
-            result = methods.percentage(a, b)
-            display.text = result.to_s + '%'
-            $current_input = result.to_s
-          else
-            display.text = 'Error: Invalid input'
-            $current_input = ''
-          end
-        when 'Median'
-          data = $current_input.split(',').map(&:to_f)
-          result = methods.median(data)
-          display.text = result.to_s
-          $current_input = result.to_s
-        when 'Prime'
-          n = $current_input.to_i
-          methods.generateprime(n)
-          display.text = "Primes saved"
-          $current_input = ''
-=======
-          evaluate_expression(display, methods_instance)
+          evaluate_expression(display, methods_instance3)
         when 'Neg'
           if !$current_input.empty?
             if $current_input[-1] =~ /[\+\-\*\/]/
@@ -250,17 +322,17 @@ buttons.each_with_index do |row, row_index|
             update_display('-', display)
           end
         when 'genOdd'
-          odd_popup(methods_instance, display)
+          odd_popup(methods_instance3, display)
         when 'sin'
-          result = methods_instance.sin($current_input.to_f)
+          result = methods_instance3.sin($current_input.to_f)
           display.text = result.to_s
           $current_input = result.to_s
         when 'cos'
-          result = methods_instance.cos($current_input.to_f)
+          result = methods_instance3.cos($current_input.to_f)
           display.text = result.to_s
           $current_input = result.to_s
         when 'tan'
-          result = methods_instance.tan($current_input.to_f)
+          result = methods_instance3.tan($current_input.to_f)
           display.text = result.to_s
           $current_input = result.to_s
         when 'abs'
@@ -273,14 +345,51 @@ buttons.each_with_index do |row, row_index|
           #TODO
         when 'log'
           #TODO
+          # values = $current_input.split(',')
+          #if values.length == 2
+          #   a = values[0].to_f
+          #   b = values[1].to_f
+          #   result = methods_instance2.logarithm(a, b)
+          #   display.text = result.to_s
+          #   $current_input = result.to_s
+            log_popup(methods_instance2, display)
+          #else
+            #display.text = 'Error: Invalid input'
+            #$current_input = ''
+          #end
         when '!'
           #TODO
+          n = $current_input.to_i
+          result = methods_instance2.factorial(n)
+          display.text = result.to_s
+          $current_input = result.to_s
         when '%'
           #TODO
+          values = $current_input.split(',')
+          #if values.length == 2
+            # a = values[0].to_f
+            # b = values[1].to_f
+            # result = methods_instance2.percentage(a, b)
+            # display.text = result.to_s + '%'
+            # $current_input = result.to_s
+            percent_popup(methods_instance2, display)
+          #else
+            #display.text = 'Error: Invalid input'
+            #$current_input = ''
+          #end
         when 'median'
           #TODO
+          #data = $current_input.split(',').map(&:to_f)
+          #result = methods_instance2.median(data)
+          #display.text = result.to_s
+          #$current_input = result.to_s
+          median_popup(methods_instance2, display)
         when 'genPrime'
           #TODO
+          n = $current_input.to_i
+          methods_instance2.generateprime(n)
+          display.text = "Primes saved"
+          $current_input = ''
         when 'min'
           #TODO
         when 'isPrime'
@@ -299,7 +408,6 @@ buttons.each_with_index do |row, row_index|
           #TODO
         when 'genFib'
           #TODO
->>>>>>> e29c4d8d31b7fb66c197185e6b9b9e016fbbc36a
         else
           update_display(button_text, display)
         end
