@@ -34,8 +34,8 @@ class Methods4
         if data.length == 0 
             return "Error calculating maximum"
         end
-    max = 0
-    tempMax = 0
+    max = -Float::INFINITY
+    tempMax = -Float::INFINITY
     i = 0
         while i < data.length
             if tempMax < data[i]
