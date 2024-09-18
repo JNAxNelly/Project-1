@@ -1,6 +1,7 @@
 require 'tk'
 require_relative 'Methods1'
 require_relative 'Methods3'
+require_relative 'Method2'
 
 
 # Create the main window (root)
@@ -29,6 +30,7 @@ OPERATORS = {
 
 methods_instance3 = Methods3.new
 methods_instance1 = Methods1.new
+methods_instance2 = Method2.new
 
 def update_display(new_value, display)
   $current_input += new_value
@@ -121,6 +123,113 @@ def evaluate_expression(display, methods_instance3)
   rescue
     display.text = 'Error'
     $current_input = ''
+  end
+end
+def handle_median_to_file(methods_instance2, data_entry, display, popup)
+  data = data_entry.value.split(',').map(&:to_f)
+  result = methods_instance2.median(data)
+  display.text = result.to_s
+  
+  popup.destroy
+end
+
+def median_popup(methods_instance2, display)
+  popup = TkToplevel.new { title "Median Calculator" }
+
+  TkLabel.new(popup) do
+    text 'Enter numbers (comma-separated):'
+    pack { padx 10; pady 5 }
+  end
+
+  data_entry = TkEntry.new(popup) do
+    width 30
+    pack { padx 10; pady 5 }
+  end
+
+  TkButton.new(popup) do
+    text 'Calculate Median'
+    command { handle_median_to_file(methods_instance2, data_entry, display, popup) }
+    pack { padx 10; pady 10 }
+  end
+end
+
+def handle_log(methods_instance2, base_entry, number_entry, display, popup)
+  base = base_entry.value.to_f
+  number = number_entry.value.to_f
+
+  result = methods_instance2.logarithm(base, number)
+  display.text = result.to_s
+  
+  popup.destroy
+end
+
+def log_popup(methods_instance2, display)
+  popup = TkToplevel.new { title "Logarithm Calculator" }
+
+  TkLabel.new(popup) do
+    text 'Enter number:'
+    pack { padx 10; pady 5 }
+  end
+
+  base_entry = TkEntry.new(popup) do
+    width 10
+    pack { padx 10; pady 5 }
+  end
+
+  TkLabel.new(popup) do
+    text 'Enter base:'
+    pack { padx 10; pady 5 }
+  end
+
+  number_entry = TkEntry.new(popup) do
+    width 10
+    pack { padx 10; pady 5 }
+  end
+
+  TkButton.new(popup) do
+    text 'Calculate Log'
+    command { handle_log(methods_instance2, base_entry, number_entry, display, popup) }
+    pack { padx 10; pady 10 }
+  end
+end
+
+def handle_percent(methods_instance2, base_entry, percent_entry, display, popup)
+  base = base_entry.value.to_f
+  percent = percent_entry.value.to_f
+
+  result = methods_instance2.percentage(base, percent)
+  display.text = result.to_s + '%'
+  
+  popup.destroy
+end
+
+def percent_popup(methods_instance2, display)
+  popup = TkToplevel.new { title "Percentage Calculator" }
+
+  TkLabel.new(popup) do
+    text 'Enter numerator:'
+    pack { padx 10; pady 5 }
+  end
+
+  base_entry = TkEntry.new(popup) do
+    width 10
+    pack { padx 10; pady 5 }
+  end
+
+  TkLabel.new(popup) do
+    text 'Enter denominator:'
+    pack { padx 10; pady 5 }
+  end
+
+  percent_entry = TkEntry.new(popup) do
+    width 10
+    pack { padx 10; pady 5 }
+  end
+
+  TkButton.new(popup) do
+    text 'Calculate Percent'
+    command { handle_percent(methods_instance2, base_entry, percent_entry, display, popup) }
+    pack { padx 10; pady 10 }
   end
 end
 
@@ -401,15 +510,21 @@ buttons.each_with_index do |row, row_index|
           display.text = result.to_s
           $current_input = result.to_s
         when 'log'
-          #TODO
+          log_popup(methods_instance2, display)
         when '!'
-          #TODO
+          n = $current_input.to_i
+          result = methods_instance2.factorial(n)
+          display.text = result.to_s
+          $current_input = result.to_s
         when '%'
-          #TODO
+          percent_popup(methods_instance2, display)
         when 'median'
-          #TODO
+          median_popup(methods_instance2, display)
         when 'genPrime'
-          #TODO
+          n = $current_input.to_i
+          methods_instance2.generateprime(n)
+          display.text = "Primes saved"
+          $current_input = ''
         when 'min'
           minimum_popup(methods_instance3, display)
         when 'isPrime'
