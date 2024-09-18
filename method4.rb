@@ -59,7 +59,9 @@ class Methods4
         num3 = num1 
         num1 = num2 + num1
         num2 = num3
+        if (num1 < limit)
         file.puts(num1)
+        end
         end
         file.close()
         puts("numbers generated to fib.txt")
@@ -69,8 +71,3 @@ class Methods4
         return (degree - 32) * (5/9.to_f)
     end
 end
-methodsTest = Methods4.new
-puts(methodsTest.maximum([1,8,3,4,5,6]))
-puts(methodsTest.mean([1,2,3,4,5,6]))
-puts(methodsTest.fToC(49))
-puts(methodsTest.fibonacci(9))

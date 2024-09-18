@@ -1,2 +1,6 @@
-Nelson, Nebyu, Jabel, Aidan
-We are now all set up with vsCode and in the terminal
+README CALCULATOR PROJECT, CSE 3901 09/17/2024
+A calculator project using methods to perform calculations on numbers and datasets, using the Ruby language and the Ruby GUI library TK.
+AUTHORS - Aidan Alexander, Jonathan Abel, Nebyu Mekuanet, Nelson Adjomo 
+INSTRUCTIONS
+To run the calculator, first type “ruby Main.rb” into the terminal. The computer will then display a calculator GUI with the calculator and all its functions. After performing a calculation and wanting to clear the display text, press C to clear. For some buttons, a number is required to be inputted into the display before pressing the button. This includes the buttons: FtoC, !, sin, cos, tan, Neg, binary, hexadecimal, octal, cbrt, sqrt. Other buttons have specific popup GUIs and the answers will display in the main calculator display. The project consists of methods that perform these calculations, and then have methods that utilize these methods into a GUI format. There is a custom method to solve and use correct order of operations for prefixes, using a stack to correctly perform the proper order. There are files of test methods to show that the calculator methods are fully correct and functional, providing error messages and warnings for improper inputs and accommodating for edge cases. To check these test cases, run the files using “$ ruby <test method file>”. One disclaimer is that multiplication will not work using parentheses (e.g. “8(9)”), but otherwise the calculator is fully functional. Each author worked on an individual part of the main method using the methods they created on their own, 1-4 respectively.
+
