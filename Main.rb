@@ -26,8 +26,8 @@ OPERATORS = {
   '^' => 3,
   '√' => 4
 }
-methods_instance1 = Methods1.new ## Nelson
-methods_instance3 = Methods3.new ##Jabel
+
+methods_instance = Methods3.new
 
 def update_display(new_value, display)
   $current_input += new_value
@@ -69,7 +69,7 @@ def to_postfix(expression)
   output
 end
 
-def evaluate_postfix(postfix, methods_instance3)
+def evaluate_postfix(postfix, methods_instance)
   stack = []
 
   postfix.each do |token|
@@ -99,6 +99,9 @@ def evaluate_postfix(postfix, methods_instance3)
       b = stack.pop
       a = stack.pop
       stack.push(a**b)
+    elsif token == '√'
+      a = stack.pop
+      stack.push(methods_instance.sqrt(a))
     end
   end
 
@@ -336,7 +339,7 @@ buttons = [
   ['genSqrd','genPrime','genFib','mode'],
   ['log','max','min','binary'],
   ['!','%','cbrt','octal',],
-  ['hexa', 'isPrime'], ['abs']
+  ['hexa']
 ]
 
 buttons.each_with_index do |row, row_index|
@@ -353,7 +356,7 @@ buttons.each_with_index do |row, row_index|
         when 'C'
           clear_display(display)
         when '='
-          evaluate_expression(display, methods_instance3)
+          evaluate_expression(display, methods_instance)
         when 'Neg'
           if !$current_input.empty?
             if $current_input[-1] =~ /[\+\-\*\/]/
