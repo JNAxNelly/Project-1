@@ -91,13 +91,6 @@ class Methods1
         if numAbs < 0
             numAbs = -a
         end
-   
-
-
-
-
-
-
 
      return numAbs
 
